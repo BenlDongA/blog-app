@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <a href="/">Home</a>
+    <a href="/new">New Post</a>
+  </div>
+
+  <div class="container">
+    <%- body %> <!-- chỗ này EJS sẽ chèn nội dung từ index.ejs, post.ejs, ... -->
+  </div>
+</body>
+</html>

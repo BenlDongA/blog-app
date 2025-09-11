@@ -1,0 +1,21 @@
+<h1>📰 My Blog</h1>
+
+<ul class="post-list">
+  <% posts.forEach((post, i) => { %>
+   <li>
+  <a href="/post/<%= i %>"><%= post.title %></a>
+  <small>(<%= post.date.toLocaleString() %>)</small>
+  
+  <a href="/edit/<%= i %>">✏️ Edit</a>
+
+  <form action="/delete/<%= i %>" method="POST" style="display:inline;">
+    <button type="submit">🗑️ Delete</button>
+  </form>
+</li>
+
+  <% }) %>
+</ul>
+
+<% if (posts.length === 0) { %>
+  <p>No posts yet. <a href="/new">Write one!</a></p>
+<% } %>
