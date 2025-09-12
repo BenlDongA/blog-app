@@ -1,4 +1,4 @@
-name: Deploy Node.js App
+name: Deploy Blog APP
 
 on:
   push:
@@ -27,8 +27,8 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
             cd /home/${{ secrets.VPS_USER }}/app &&
-            docker build -t blog_test:latest . &&
-            docker stop blog_test || true &&
-            docker rm blog_test || true &&
-            docker run -d --restart unless-stopped -p 80:3000 --name blog_test blog_test:latest
+            docker build -t blog_app:latest . &&
+            docker stop blog_app || true &&
+            docker rm blog_app || true &&
+            docker run -d --restart unless-stopped -p 80:3000 --name blog_app blog_app:latest
           "
