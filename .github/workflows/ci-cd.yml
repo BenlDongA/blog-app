@@ -1,4 +1,4 @@
-name: Deploy Blog APP
+name: Deploy Blog app
 
 on:
   push:
