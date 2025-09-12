@@ -1,45 +1,34 @@
-name: CI/CD Blog App
+name: Deploy Node.js App
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.8.0
         with:
-          node-version: 20
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Install dependencies
-        run: npm install
+      - name: Sync files to server
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rsync
+          rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/home/${{ secrets.VPS_USER }}/app
 
-      - name: Run tests
-        run: echo "✅ Build success, no tests yet"
-
-  docker:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/blog-app:latest
+      - name: Build Docker and restart container
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
+            cd /home/${{ secrets.VPS_USER }}/app &&
+            docker build -t blog_test:latest . &&
+            docker stop blog_test || true &&
+            docker rm blog_test || true &&
+            docker run -d --restart unless-stopped -p 80:3000 --name blog_test blog_test:latest
+          "
