@@ -1,5 +1,11 @@
-<h1><%= post.title %></h1>
-<p><%= post.content %></p>
-<small>Published at: <%= post.date.toLocaleString() %></small>
-<br><br>
-<a href="/">← Back to Home</a>
+<div class="card shadow-sm">
+  <% if (post.image) { %>
+    <img src="<%= post.image %>" class="card-img-top" alt="Post image">
+  <% } %>
+  <div class="card-body">
+    <h2><%= post.title %></h2>
+    <p><%= post.content %></p>
+    <small class="text-muted">Published at: <%= post.date.toLocaleString() %></small>
+  </div>
+</div>
+<a href="/" class="btn btn-secondary mt-3">← Back to Home</a>

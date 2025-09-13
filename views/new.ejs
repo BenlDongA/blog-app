@@ -1,6 +1,31 @@
-<h1>✍️ New Post</h1>
+<h1>✍️ Create New Post</h1>
+
 <form action="/new" method="POST" class="post-form">
-  <input type="text" name="title" placeholder="Post title" required>
-  <textarea name="content" placeholder="Write your content..." required></textarea>
-  <button type="submit">Publish</button>
+  <div class="mb-3">
+    <label class="form-label">Title</label>
+    <input type="text" name="title" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Content</label>
+    <textarea name="content" class="form-control" rows="5" required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Image URL</label>
+    <input type="text" name="image" class="form-control">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Category</label>
+    <select name="category" class="form-select" required>
+      <option value="" disabled selected>-- Select category --</option>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat %>"><%= cat %></option>
+      <% }) %>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Create</button>
+  
 </form>

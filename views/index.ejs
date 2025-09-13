@@ -1,21 +1,37 @@
-<h1>📰 My Blog</h1>
+<h1 class="mb-4">📰 Latest Posts</h1>
 
-<ul class="post-list">
-  <% posts.forEach((post, i) => { %>
-   <li>
-  <a href="/post/<%= i %>"><%= post.title %></a>
-  <small>(<%= post.date.toLocaleString() %>)</small>
-  
-  <a href="/edit/<%= i %>">✏️ Edit</a>
-
-  <form action="/delete/<%= i %>" method="POST" style="display:inline;">
-    <button type="submit">🗑️ Delete</button>
-  </form>
-</li>
-
-  <% }) %>
-</ul>
-
-<% if (posts.length === 0) { %>
-  <p>No posts yet. <a href="/new">Write one!</a></p>
-<% } %>
+<div class="row">
+  <% if (posts.length === 0) { %>
+    <p>No posts yet. <a href="/new" class="btn btn-sm btn-primary">Write one!</a></p>
+  <% } else { %>
+    <% posts.forEach((post, i) => { %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <% if (post.image) { %>
+            <img src="<%= post.image %>" class="card-img-top" alt="Post image">
+          <% } %>
+          <div class="card-body">
+            <h5 class="card-title"><%= post.title %></h5>
+            <p class="text-muted">
+  Category: 
+  <% if (post.category) { %>
+    <a href="/category/<%= post.category %>"><%= post.category %></a>
+  <% } else { %>
+    Uncategorized
+  <% } %>
+</p>
+            <p class="card-text"><%= post.content.substring(0, 100) %>...</p>
+            <a href="/post/<%= i %>" class="btn btn-primary btn-sm">Read More</a>
+            <a href="/edit/<%= i %>" class="btn btn-warning btn-sm">Edit</a>
+            <form action="/delete/<%= i %>" method="POST" class="d-inline">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted"><%= post.date.toLocaleString() %></small>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  <% } %>
+</div>
